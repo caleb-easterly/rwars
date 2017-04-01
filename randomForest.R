@@ -42,8 +42,15 @@ EucliDis = function(longitude, latitude){
   return(longitude^2 + latitude^2)^0.5
 }
 
-groundTruth = matrix(c(small_test$srch_destination_longitude, small_test$srch_destination_latitude), ncol = 2)
+offsetDis = function(lon1, lat1, lon2, lat2){
+  p = pi/180
+  a = 0.5 - cos((lat2 - lat1) * p)/2 + cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p))/2
+  return(12742 * asin(a^2))  #km
+}
+
+groundTruth = matrix(c(small_test$srch_destination_longitude, 
+                       small_test$srch_destination_latitude), ncol = 2)
 offSet = rep(0, nrow(testOut))
 for(i in 1:nrow(testOut)){
-  offSet[i] = EucliDis(groundTruth[i,][1], groundTruth[i,][2]) - EucliDis(testOut[i,][1], testOut[i,][2])
+  offSet[i] = offsetDis(groundTruth[i,][1], groundTruth[i,][2], testOut[i,][1], testOut[i,][2])
 }
