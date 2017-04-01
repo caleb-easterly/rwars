@@ -11,8 +11,21 @@ mult_reg_tree <- rfsrc(Multivar(srch_destination_longitude, srch_destination_lat
                            length_of_stay + srch_adults_cnt + srch_children_cnt + srch_rm_cnt + is_booking, 
                             data = small_dat)
 
-minnesota_person <- subset(small_test, user_location_region == "MN" &
-                               srch_month == "2" & srch_adults_cnt ==2 )
+minnesota_person <- subset(small_test, user_location_region == "MN")
+
+predictions_mn <- predict(mult_reg_tree, newdata = minnesota_person)
+output_values_mn <- data.frame("long" = predictions_mn$regrOutput$srch_destination_longitude$predicted,
+            "lat" = predictions_mn$regrOutput$srch_destination_latitude$predicted)
+
+# use vimp
+map <- get_map(location='united states', zoom = 4,
+               color = "bw")
+
+ggmap(map, extent = 'device') + 
+    geom_point(data = output_valuesmn, aes(x = long, y = lat), size = 3) + 
+    geom_point(aes(x = minnesota_person$user_location_longitude, y = minnesota_person$user_location_latitude, color = "prediction"), size = 3) + 
+    geom_point(aes(x = minnesota_person$srch_destination_longitude, y = minnesota_person$srch_destination_latitude, color = "truth"), size = 3)
+
 
 predictions <- predict(mult_reg_tree, newdata = minnesota_person)
 output_values <- c(predictions$regrOutput$srch_destination_longitude$predicted,
