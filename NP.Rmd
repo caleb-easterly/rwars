@@ -1,0 +1,12 @@
+---
+title: "DataFes5t"
+author: "Nicoletta Peters"
+date: "3/31/2017"
+output: html_document
+---
+
+```{r}
+library(Hmisc)
+describe(data_raw)
+
+```
