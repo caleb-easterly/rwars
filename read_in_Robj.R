@@ -53,7 +53,9 @@ data_raw$length_of_stay <- parSapply(cl, 1:nrows_data_raw,
 data_raw = subset(data_raw, !length_of_stay < 0)
 stopCluster(cl)
 
+data_raw<-subset(data_raw, !(nchar(srch_ci))!=5)
 
+                                       
 dom_data <- subset(data_raw, !hotel_country != "UNITED STATES OF AMERICA")
 dom_data <- subset(dom_data, !user_location_country != "UNITED STATES OF AMERICA")
 
