@@ -99,9 +99,12 @@ train_indices <- base::sample(1:nrows_clean, size = size_of_train, replace = FAL
 
 train_df <- joined_varimp_dom_data[train_indices, ]
 test_df <- joined_varimp_dom_data[-train_indices, ]
-save(train_df, file = "train_df.rda")
-save(test_df, file = "test_df.rda")
+save(train_df, file = "../train_df.rda")
+save(test_df, file = "../test_df.rda")
 
+small_dat <- sample_n(train_df, 10000)
+save(small_dat, file = "small_dat.rda")
+    
 # <<<<<<< HEAD
 # =======
 # #col 13&14
@@ -145,8 +148,8 @@ save(test_df, file = "test_df.rda")
 #                               get_day(srch_ci),
 #                               get_year(srch_ci)
 #                             )
-
-<<<<<<< HEAD
+# 
+# <<<<<<< HEAD
 #col 13&14
 # data_raw = subset(data_raw, !nchar(srch_ci)!=5)
 # data_raw$length_of_stay <- parSapply(cl, 1:nrows_data_raw, 
