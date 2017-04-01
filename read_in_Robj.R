@@ -1,7 +1,7 @@
 require(readr)
 require(stringr)
 
-data_raw <- read_tsv("data.txt")
+data_raw <- read_tsv("../data.txt", n_max = 10000)
 data_raw$user_location_latitude <- as.numeric(data_raw$user_location_latitude)
 data_raw$user_location_longitude <- as.numeric(data_raw$user_location_longitude)
 
@@ -25,8 +25,11 @@ stopCluster(cl)
 
 # full data frame is 10,884,539 rows and 27 variables
 # all of the website data is from 2015 
-dest_raw <- read_tsv("dest.txt", n_max = 10000)
+dest_raw <- read_tsv("../dest.txt", n_max = 10000)
+
+
 
 ggplot(subset(data_raw, user_location_country == "UNITED STATES OF AMERICA")) +
     geom_point(aes(x = user_location_longitude, y = user_location_latitude))
 
+save(data_raw, file = "data_10000_cases.rda")
