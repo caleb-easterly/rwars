@@ -10,3 +10,12 @@ library(Hmisc)
 describe(data_raw)
 
 ```
+
+```{r}
+dom_data<-subset(data_raw, !hotel_country!="UNITED STATES OF AMERICA")
+dom_data<-subset(dom_data, !user_location_country!="UNITED STATES OF AMERICA")
+```
+
+```{r}
+plot(dom_data$orig_destination_distance, dom_data$srch_children_cnt)
+```
