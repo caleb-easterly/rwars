@@ -27,8 +27,6 @@ stopCluster(cl)
 # all of the website data is from 2015 
 dest_raw <- read_tsv("../dest.txt", n_max = 10000)
 
-
-
 ggplot(subset(data_raw, user_location_country == "UNITED STATES OF AMERICA")) +
     geom_point(aes(x = user_location_longitude, y = user_location_latitude))
 
