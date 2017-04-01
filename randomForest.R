@@ -1,4 +1,4 @@
-require(randomForestSRC)
+library(randomForestSRC)
 
 load("small_dat.rda") # data frame of same name
 
@@ -17,3 +17,17 @@ minnesota_person <- subset(small_test, user_location_region == "MN" &
 predictions <- predict(mult_reg_tree, newdata = minnesota_person)
 output_values <- c(predictions$regrOutput$srch_destination_longitude$predicted,
             predictions$regrOutput$srch_destination_latitude$predicted)
+
+
+testPred = predict(mult_reg_tree, newdata = small_test)
+testOut = matrix(c(testPred$regrOutput$srch_destination_longitude$predicted, testPred$regrOutput$srch_destination_latitude$predicted), ncol = 2)
+
+EucliDis = function(longitude, latitude){
+  return(longitude^2 + latitude^2)^0.5
+}
+
+groundTruth = matrix(c(small_test$srch_destination_longitude, small_test$srch_destination_latitude), ncol = 2)
+offSet = rep(0, nrow(testOut))
+for(i in 1:nrow(testOut)){
+  offSet[i] = EucliDis(groundTruth[i,][1], groundTruth[i,][2]) - EucliDis(testOut[i,][1], testOut[i,][2])
+}
