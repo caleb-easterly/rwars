@@ -16,13 +16,22 @@ conv_month_day <- function(month, day){
     sum(days_in_month[1:(month - 1)]) + day
 }
 require(parallel)
+
+nrows_data_raw <- nrow(data_raw)
+
 cl <- makeCluster(3, type = "FORK")
-data_raw$day_of2015 <- parSapply(cl, 1:nrows_data_raw, 
+
+data_raw$srch_day_of2015 <- parSapply(cl, 1:nrows_data_raw, 
                                  function(i) conv_month_day(
                                      as.numeric(str_sub(data_raw$date_time[i], start = 6, end = 7)), 
                                      as.numeric(str_sub(data_raw$date_time[i], start = 9, end = 10))
                                  )
 )
+data_raw$srch_month <- parSapply(cl, 1:nrows_data_raw, 
+                                 function(i)
+                                     as.numeric(str_sub(data_raw$date_time[i], start = 6, end = 7
+                                     )))
+
 stopCluster(cl)
 
 
@@ -30,12 +39,13 @@ dom_data <- subset(data_raw, !hotel_country != "UNITED STATES OF AMERICA")
 dom_data <- subset(dom_data, !user_location_country != "UNITED STATES OF AMERICA")
 
 require(dplyr)
+
+# drops the search IDs that don't have a corresponding entry in dest_raw, and vice versa
 joined_dest_dom_data <- inner_join(dom_data, dest_raw, by = "srch_destination_id")
 joined_dest_dom_data <- as.data.frame(mutate_at(joined_dest_dom_data, vars(srch_destination_latitude, srch_destination_longitude), funs(as.numeric(.))))
 
 save(joined_dest_dom_data, file = "joined_dest_dom_data.rda")
 
-nrows_data_raw <- nrow(data_raw)
 
 # ggplot(subset(data_raw, user_location_country == "UNITED STATES OF AMERICA")) +
 #     geom_point(aes(x = user_location_longitude, y = user_location_latitude))
