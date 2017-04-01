@@ -15,10 +15,11 @@ dest_raw <- select(dest_raw, -starts_with("popular"))
 data_raw$user_location_latitude <- as.numeric(data_raw$user_location_latitude)
 data_raw$user_location_longitude <- as.numeric(data_raw$user_location_longitude)
 
-#subset to domestic data only
+#subset to domestic data only, remove all rows with missing user_longitude or latitude
 dom_data <- subset(data_raw, 
                    hotel_country == "UNITED STATES OF AMERICA" & 
-                     user_location_country == "UNITED STATES OF AMERICA")
+                     user_location_country == "UNITED STATES OF AMERICA" &
+                       !is.na(user_location_latitude) & !is.na(user_location_longitude))
 
 
 # drops the search IDs that don't have a corresponding entry in dest_raw, and vice versa
