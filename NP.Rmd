@@ -12,12 +12,26 @@ describe(data_raw)
 ```
 
 ```{r}
-load("data_10000_cases.rda")
 dom_data<-subset(data_raw, !hotel_country!="UNITED STATES OF AMERICA")
 dom_data<-subset(dom_data, !user_location_country!="UNITED STATES OF AMERICA")
 ```
 
 ```{r}
 plot(dom_data$orig_destination_distance, dom_data$srch_children_cnt)
-```
+plot(dom_data$prop_starrating, dom_data$srch_children_cnt)
+barplot(table(dom_data$is_booking, dom_data$srch_rm_cnt))
+barplot(table(dom_data$is_booking, dom_data$srch_adults_cnt))
 
+require(aod)
+require(ggplot2)
+
+#myprobit <- glm(admit ~ gre + gpa + rank, family = binomial(link = "probit"), 
+    #data = mydata)
+
+bookprob<-glm(is_booking~ srch_children_cnt, family= binomial(link="probit"), data=dom_data)
+
+prop.table(table(dom_data$is_booking, dom_data$srch_children_cnt),margin=1)
+#column
+prop.table(table(dom_data$is_booking, dom_data$srch_children_cnt),margin=2)
+
+```

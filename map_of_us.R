@@ -1,6 +1,7 @@
 # map of us
 
 require(ggmap)
+require(leaflet)
 
 load("joined_dest_dom_data.rda")
 
@@ -35,3 +36,13 @@ ggmap(map, extent = 'device') +
               data = lonlat2, size = 0.5) + 
     theme(legend.position = "none")
     
+#replace minneapolis with feeding in our input
+src_loc <-ggmap::geocode("Minnesota")      
+src_loc
+
+leaflet(src_loc) %>% addTiles() %>% addMarkers()
+leaflet(src_loc) %>% addProviderTiles("Stamen.Watercolor") %>% addMarkers()
+
+leaflet(pred_dest) %>% addTiles() %>% addMarkers()
+
+
