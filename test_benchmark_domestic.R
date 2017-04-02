@@ -9,8 +9,7 @@ test_temp_df <- test_df
 mult_reg_tree <- rfsrc(Multivar(srch_destination_longitude, srch_destination_latitude) ~ 
                            user_location_longitude + user_location_latitude + srch_month + 
                            length_of_stay + srch_adults_cnt +
-                           srch_children_cnt + srch_rm_cnt + is_booking + prop_is_branded + 
-                           prop_starrating + popularity_band, 
+                           srch_children_cnt + srch_rm_cnt + is_booking + ci_month, 
                        nsplit = 4,
                        nodesize = 20,
                        seed = -29,

@@ -98,7 +98,12 @@ joined_varimp_dom_data <- dplyr::select(filt_dom_data,
                                       -hotel_id,
                                       -distance_band,
                                       -srch_destination_name
-                                      )
+                                      -ci_day,
+                                      -ci_year,
+                                      -co_day,
+                                      -co_year,
+                                      -co_month
+)
 
 # select training and testing 
 
