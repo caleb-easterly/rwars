@@ -10,7 +10,8 @@ small_test <- small_dat[-small_train_ind, ]
 mult_reg_tree <- rfsrc(Multivar(srch_destination_longitude, srch_destination_latitude) ~ 
                            user_location_longitude + user_location_latitude + srch_month + 
                            length_of_stay + srch_adults_cnt +
-                           srch_children_cnt + srch_rm_cnt + is_booking, 
+                           srch_children_cnt + srch_rm_cnt + is_booking + prop_is_branded + 
+                           prop_starrating + popularity_band, 
                             data = small_dat)
 
 minnesota_person <- subset(small_test, user_location_region == "MN")[7, ]

@@ -1,6 +1,8 @@
 # map of us
 
 require(ggmap)
+require(ggplot2)
+require(dplyr)
 
 load("joined_dest_dom_data.rda")
 
@@ -36,3 +38,4 @@ ggmap(map, extent = 'device') +
                data = lonlat2, size = 2, shape = 1) +
     theme(legend.position = "none") + 
     scale_color_manual(values = c("dodgerblue", "darkorange", "purple", "black"))
+ggsave("travel_from_mn.png", scale = 2)

@@ -71,6 +71,15 @@ dom_data <- mutate(dom_data,
                    length_of_stay = co_day_since_jan1_2015 - ci_day_since_jan1_2015)
 dom_data <- subset(dom_data, length_of_stay > 0)
 
+# make sure data types are what we need
+dom_data$prop_starrating <- as.numeric(dom_data$prop_starrating)
+dom_data$prop_is_branded <- as.factor(dom_data$prop_is_branded)
+dom_data$popularity_band <- as.factor(dom_data$popularity_band)
+dom_data$cnt <- as.numeric(dom_data$cnt)
+dom_data$srch_adults_cnt <- as.numeric(dom_data$srch_adults_cnt)
+dom_data$srch_children_cnt <- as.numeric(dom_data$srch_children_cnt)
+dom_data$srch_rm_cnt <- as.numeric(dom_data$srch_children_cnt)
+
 # from geocode("cape_flattery")[1, 1]
 farthest_west <- -124.7144
 filt_dom_data <- dplyr::filter(dom_data,    
@@ -100,8 +109,11 @@ train_indices <- base::sample(1:nrows_clean, size = size_of_train, replace = FAL
 
 train_df <- joined_varimp_dom_data[train_indices, ]
 test_df <- joined_varimp_dom_data[-train_indices, ]
+all_df <- joined_varimp_dom_data
+
 save(train_df, file = "../train_df.rda")
 save(test_df, file = "../test_df.rda")
+save(all_df, file = "../all_df.rda")
 
 small_dat <- sample_n(train_df, 10000)
 save(small_dat, file = "small_dat.rda")
