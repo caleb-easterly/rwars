@@ -114,15 +114,27 @@ train_indices <- base::sample(1:nrows_clean, size = size_of_train, replace = FAL
 
 train_df <- joined_varimp_dom_data[train_indices, ]
 test_df <- joined_varimp_dom_data[-train_indices, ]
-all_df <- joined_varimp_dom_data
+
+size_of_subset <- 1.5e6
+subset_sample_ind <- base::sample(1:nrows_clean, size = size_of_subset, replace = FALSE)
+subset_df <- joined_varimp_dom_data[subset_sample_ind, ]
+
+subset_train_index <- sample(1:1e6, size = 1e6, replace = FALSE)
+train_subset_df <- subset_df[subset_train_index, ]
+test_subset_df <- subset_df[-subset_train_index, ]
 
 save(train_df, file = "../train_df.rda")
 save(test_df, file = "../test_df.rda")
-save(all_df, file = "../all_df.rda")
+save(train_subset_df, file = "../train_subset_df.rda")
+save(test_subset_df, file = "../test_subset_df.rda")
 
 small_dat <- sample_n(train_df, 10000)
 save(small_dat, file = "small_dat.rda")
-    
+  
+## bookers
+bookers_df <- subset(joined_varimp_dom_data, is_booking == 1)
+save(bookers_df, file = "../bookers_df.rda")
+
 # <<<<<<< HEAD
 # =======
 # #col 13&14
