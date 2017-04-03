@@ -19,7 +19,7 @@ mult_reg_tree <- rfsrc(Multivar(srch_destination_longitude, srch_destination_lat
                          length_of_stay + srch_adults_cnt +
                          srch_children_cnt + srch_rm_cnt + is_booking + ci_month,
                        seed = -29,
-                       ntree = 100,
+                       ntree = 1000,
                        data = train_temp_df)
 
 # save(mult_reg_tree, file = "mult_reg_tree.rda")
@@ -28,11 +28,9 @@ test = predict(mult_reg_tree, newdata = test_temp_df)
 output = matrix(c(test$regrOutput$srch_destination_longitude$predicted,
                   test$regrOutput$srch_destination_latitude$predicted), ncol = 2)
 
-
-
 ppl <- cbind(test_temp_df, "pred_long" = output[, 1], "pred_lat" = output[, 2])
-ppl2 <- subset(ppl, srch_adults_cnt == 2 & srch_children_cnt == 0 & 
-                 ci_month == 3 & length_of_stay == 2 &
+ppl2 <- subset(ppl, srch_adults_cnt == 1 & srch_children_cnt == 0 & 
+                 ci_month == 4 & 
                  user_location_region == "MN")  
 ppl3 <- select(ppl2, 
                user_location_latitude, 
@@ -74,11 +72,30 @@ for(i in 1:nrow(output)){
   offDis[i] = offsetDis(truth[i,][1], truth[i,][2], output[i,][1], output[i,][2])
 }
 
+print(mean(offDis))
+
+
 # var_imp <- vimp(mult_reg_tree)
 
 
 
+# macalester 
+require(ggmap)
+mac <- geocode("macalester college")
+ppl_mac <- ppl2[1, ]
+ppl_mac$user_location_latitude <- mac[1, 2]
+ppl_mac$user_location_longitude <- mac[1, 1]
 
+ppl_mac2 <- rbind(ppl_mac, ppl_mac)
+ppl_mac2$ci_month <- c(3, 12)
+  
+macpred = predict(mult_reg_tree, newdata = ppl_mac2)
+macout <- data.frame(macpred$regrOutput$srch_destination_longitude$predicted, macpred$regrOutput$srch_destination_latitude$predicted)
 
-
-
+map <- get_map(location="macalester college", zoom = 5, maptype = "terrain")
+ggmap(map, extent = "device") +
+  geom_point(aes(x = mac[1, 1], y = mac[1, 2], color = "Location"), size = 3) + 
+  geom_point(aes(x = macout[1, 1], y = macout[1, 2], color = "March"), size = 3) + 
+  geom_point(aes(x = macout[2, 1], y = macout[2, 2], color = "December"), size = 3) +
+  scale_color_discrete(name = "Color")
+ggsave("macpred.png")
